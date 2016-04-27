@@ -4,7 +4,35 @@ const qs = require("qs");
 
 const TAG_NAME = "images";
 
-class Images {
+const getImageUrl = function (site) {
+
+  return function (relpath, filters) {
+
+    filters = filters || {};
+
+    if (typeof filters === "string") {
+      filters = qs.parse(filters);
+    }
+
+    const image = site.getImage(relpath);
+
+    if (!image) {
+      return "";
+    }
+
+    let url = image.url;
+
+    if (Object.keys(filters).length > 0) {
+      url = image.addVariant(filters).url;
+    } else {
+      image.output = true;
+    }
+
+    return url;
+  };
+};
+
+class ImagesExtension {
 
   constructor() {
 
@@ -22,33 +50,13 @@ class Images {
 
   run(context, relpath, filters) {
 
-    filters = filters || {};
-
-    if (typeof filters === "string") {
-      filters = qs.parse(filters);
-    }
-
-    const site = context.env.globals.site;
-    const image = site.getImage(relpath);
-
-    if (!image) {
-      return `<!-- image ${relpath} not found -->`;
-    }
-
-    let url = image.url;
-
-    if (Object.keys(filters).length > 0) {
-      url = image.addVariant(filters).url;
-    } else {
-      image.output = true;
-    }
-
-    return url;
+    return getImageUrl(context.env.globals.site)(relpath, filters);
   }
 }
 
-module.exports = Images;
+module.exports = ImagesExtension;
 
 module.exports.install = function (env) {
-  env.addExtension("Images", new Images());
+  env.addExtension("ImagesExtension", new ImagesExtension());
+  env.addFilter(TAG_NAME, getImageUrl(env.getGlobal("site")));
 };
