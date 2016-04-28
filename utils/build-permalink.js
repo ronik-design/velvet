@@ -1,5 +1,7 @@
 "use strict";
 
+const path = require("path");
+
 const PAGES = "pages";
 const POSTS = "posts";
 const DOCUMENTS = "documents";
@@ -109,7 +111,7 @@ const buildPermalink = function (tokens, options) {
       type === STYLES ||
       type === IMAGES) {
 
-    permalink = permalink || "/:urlpath/:dirname/:basename:extname";
+    permalink = permalink || "/:urlpath/:dirname/:basename:output_ext";
 
   }
 
@@ -130,6 +132,13 @@ const buildPermalink = function (tokens, options) {
       // Replace token
       permalink = permalink.replace(token, replacement);
     }
+  }
+
+  if (tokens[":hash"] && options.revision) {
+    const ext = path.extname(permalink);
+    const hash = tokens[":hash"];
+    const re = new RegExp(`${ext}$`);
+    permalink = permalink.replace(re, `.${hash}${ext}`);
   }
 
   // Add the baseurl

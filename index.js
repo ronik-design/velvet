@@ -24,7 +24,10 @@ module.exports.loadEnv = function (options) {
   const config = prepareConfig(options.config);
 
   // Initialize Stencil core
-  stencil.init({ config });
+  stencil.init({
+    config,
+    environment: process.env.NODE_ENV || options.environment
+  });
 
   // Plugin load order allows npm modules to override internal
   stencil.plugins.requirePluginFiles(path.join(__dirname, "plugins"));
@@ -36,8 +39,9 @@ module.exports.loadEnv = function (options) {
 
   // Set up the Nunjucks env
   const loader = new nunjucks.FileSystemLoader(config.templates_dir);
-  const env = new nunjucks.Environment(loader, { autoescape: false });
+  const env = new nunjucks.Environment(loader, { autoescape: options.autoescape || false });
 
+  env.addGlobal("stencil", stencil);
   env.addGlobal("site", stencil.site);
 
   env.resetCache = function () {

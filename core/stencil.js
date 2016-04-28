@@ -2,11 +2,14 @@
 
 "use strict";
 
+const hoek = require("hoek");
+
 class Stencil {
 
   init(options) {
 
     this.config = options.config;
+    this.environment = options.environment || "development";
 
     this.site = this.autoload("./classes/site");
     this.hooks = this.autoload("./classes/hooks");
@@ -26,9 +29,12 @@ class Stencil {
   }
 
   autoload(filepath) {
-
     const Ctor = require(filepath);
     return new Ctor({ config: this.config });
+  }
+
+  getConfig(prop) {
+    return hoek.reach(this.config, prop);
   }
 }
 

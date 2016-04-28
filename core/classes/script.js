@@ -20,10 +20,16 @@ class Script extends stencil.File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":hash": this.hash,
       ":urlpath": stencil.config.scripts_path,
       ":output_ext": ".js"
     });
+  }
+
+  get minify() {
+
+    // Minification
+    const revisionEnvs = stencil.getConfig("scripts.minify.envs") || [];
+    return revisionEnvs.indexOf(stencil.environment) >= 0;
   }
 }
 

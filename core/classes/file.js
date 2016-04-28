@@ -26,6 +26,7 @@ class File {
 
     // Data store
     this.data = Object.assign(data, {
+      type: options.type || "files",
       output: options.hasOwnProperty("output") ? options.output : true,
       path: options.path,
       filepath: options.filepath,
@@ -39,6 +40,8 @@ class File {
 
     // Permalink tokens
     this[TOKENS] = {
+      ":hash": this.hash,
+      ":output_ext": pathParts.ext,
       ":extname": pathParts.ext,
       ":basename": pathParts.name,
       ":dirname": pathParts.dir,
@@ -47,8 +50,14 @@ class File {
   }
 
   getUrl(tokens, permalink) {
-    permalink = permalink || this.data.permalink;
-    return buildPermalink(tokens, { pattern: permalink, type: this[TYPE] });
+
+    const opts = {
+      pattern: permalink || this.data.permalink,
+      type: this[TYPE],
+      revision: this.revision
+    };
+
+    return buildPermalink(tokens, opts);
   }
 
   get output() {
@@ -149,6 +158,13 @@ class File {
     this.data.hash = md5File(this.filepath);
 
     return this.data.hash;
+  }
+
+  get revision() {
+
+    // Revisioning
+    const revisionEnvs = stencil.getConfig(`${this[TYPE]}.revision.envs`) || [];
+    return revisionEnvs.indexOf(stencil.environment) >= 0;
   }
 }
 

@@ -28,7 +28,6 @@ class ImageVariant extends File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":hash": this.hash,
       ":filters": qs.stringify(this.filters),
       ":filters_hash": this.filters_hash,
       ":urlpath": stencil.config.images_path

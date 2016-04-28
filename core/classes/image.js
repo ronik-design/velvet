@@ -20,7 +20,6 @@ class Image extends stencil.File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":hash": this.hash,
       ":urlpath": stencil.config.images_path
     });
 
