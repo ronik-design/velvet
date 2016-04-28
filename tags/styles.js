@@ -11,7 +11,7 @@ const getStyle = function (site) {
     const style = site.getStyle(relpath);
 
     if (style) {
-      style.copy = true;
+      style.output = true;
       return style;
     }
   };

@@ -15,11 +15,12 @@ class Style extends stencil.File {
 
     // Store
     Object.assign(this.data, {
-      permalink: stencil.config.styles.permalink
+      permalink: this.defaultValues.permalink
     });
 
     // Tokens
     Object.assign(this[TOKENS], {
+      ":hash": this.hash,
       ":urlpath": stencil.config.styles_path,
       ":output_ext": ".css"
     });

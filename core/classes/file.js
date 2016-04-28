@@ -18,8 +18,6 @@ class File {
 
   constructor(options) {
 
-    const site = stencil.site;
-
     // Type
     this[TYPE] = options.type || "files";
 
@@ -44,7 +42,7 @@ class File {
       ":extname": pathParts.ext,
       ":basename": pathParts.name,
       ":dirname": pathParts.dir,
-      ":baseurl": site.config.baseurl
+      ":baseurl": stencil.config.baseurl
     };
   }
 

@@ -34,15 +34,21 @@ module.exports.loadEnv = function (options) {
   // Register hooks once plugins are resolved
   stencil.hooks.registerAll(stencil.plugins.getPlugins());
 
-  // Initialize the site
-  stencil.site.init({ config });
-
-  const env = options.env || nunjucks.configure(config.templates_dir, { autoescape: false });
+  // Set up the Nunjucks env
+  const loader = new nunjucks.FileSystemLoader(config.templates_dir);
+  const env = new nunjucks.Environment(loader, { autoescape: false });
 
   env.addGlobal("site", stencil.site);
 
+  env.resetCache = function () {
+    loader.cache = {};
+  };
+
   loadCustomTags(__dirname, env);
   loadCustomTags(config.templates_dir, env);
+
+  // Initialize the site
+  stencil.site.init({ config });
 
   return env;
 };

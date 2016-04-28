@@ -1,5 +1,3 @@
-/* eslint no-invalid-this:0 */
-
 "use strict";
 
 const path = require("path");
@@ -134,12 +132,16 @@ const gulpRender = function (stencil) {
 
       let tasks = [];
 
+
       const opts = {
         env,
         cacheEnabled,
         templateCache,
+        /* eslint-disable */
         transform: this
+        /* eslint-enable */
       };
+
 
       if (doc.variants) {
         tasks = doc.variants.map((variant) => renderVariant(file, variant, opts));

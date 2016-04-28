@@ -37,7 +37,6 @@ const SOURCE_DIRS = {
   "posts_dir": "_posts",
   "templates_dir": "_templates",
   "scripts_dir": "_scripts",
-  "sprites_dir": "_sprites",
   "styles_dir": "_styles",
   "images_dir": "_images",
   "plugins_dir": "_plugins"

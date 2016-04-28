@@ -1,7 +1,6 @@
 "use strict";
 
 const getImageDimensions = require("../../utils/get-image-dimensions");
-
 const stencil = require("../stencil");
 const ImageVariant = require("./image-variant");
 
@@ -20,13 +19,16 @@ class Image extends stencil.File {
     super(options);
 
     // Tokens
-    Object.assign(this[TOKENS], { ":urlpath": stencil.config.images_path });
+    Object.assign(this[TOKENS], {
+      ":hash": this.hash,
+      ":urlpath": stencil.config.images_path
+    });
 
     // Store
     Object.assign(this.data, {
       permalink: this.defaultValues.permalink,
       dimensions: null,
-      variants: null
+      variants: {}
     });
   }
 
@@ -59,13 +61,18 @@ class Image extends stencil.File {
 
   addVariant(filters) {
 
-    this.data.variants = this.data.variants || {};
+    const variant = new ImageVariant({
+      path: this.path,
+      filepath: this.filepath,
+      collection: this.collection,
+      filters
+    });
 
-    const variant = new ImageVariant({ image: this, filters });
+    if (!this.data.variants[variant.filters_hash]) {
+      this.data.variants[variant.filters_hash] = variant;
+    }
 
-    this.data.variants[variant.filters_hash] = variant;
-
-    return variant;
+    return this.data.variants[variant.filters_hash];
   }
 }
 

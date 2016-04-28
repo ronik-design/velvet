@@ -14,12 +14,10 @@ class ImageVariant extends File {
 
   constructor(options) {
 
-    const image = options.image;
-
     options.type = "images";
     options.output = true;
 
-    super(image);
+    super(options);
 
     // Store
     Object.assign(this.data, {
@@ -30,6 +28,7 @@ class ImageVariant extends File {
 
     // Tokens
     Object.assign(this[TOKENS], {
+      ":hash": this.hash,
       ":filters": qs.stringify(this.filters),
       ":filters_hash": this.filters_hash,
       ":urlpath": stencil.config.images_path
