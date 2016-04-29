@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require("path");
 const through = require("through2");
 const File = require("vinyl");
 const gutil = require("gulp-util");
@@ -9,7 +10,7 @@ const PLUGIN_NAME = "velvet-init";
 
 const init = function (velvet) {
 
-  return function () {
+  return function (filepath) {
 
     const transform = function (file, enc, cb) {
 
@@ -21,22 +22,27 @@ const init = function (velvet) {
         return cb(new PluginError(PLUGIN_NAME, "Streaming not supported"));
       }
 
-      const obj = velvet.site.getObject(file.path);
+      filepath = filepath || path.resolve(file.base, file.path);
 
-      file.destination = obj.destination;
-      file.revision = obj.revision;
+      const obj = velvet.site.getObject(filepath);
 
-      if (obj.variants) {
-        for (const variant in obj.variants) {
-          /* eslint-disable */
-          this.push(new File({
-            contents: file.contents,
-            path: file.path,
-            base: file.base,
-            destination: variant.destination,
-            revision: variant.revision
-          }));
-          /* eslint-enable */
+      if (obj) {
+
+        file.destination = obj.destination;
+        file.revision = obj.revision;
+
+        if (obj.variants) {
+          for (const variant in obj.variants) {
+            /* eslint-disable */
+            this.push(new File({
+              contents: file.contents,
+              path: file.path,
+              base: file.base,
+              destination: variant.destination,
+              revision: variant.revision
+            }));
+            /* eslint-enable */
+          }
         }
       }
 
