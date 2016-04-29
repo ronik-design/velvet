@@ -1,6 +1,7 @@
 "use strict";
 
 const through = require("through2");
+const path = require("path");
 const File = require("vinyl");
 const gutil = require("gulp-util");
 const PluginError = gutil.PluginError;
