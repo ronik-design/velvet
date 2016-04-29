@@ -7,8 +7,8 @@ module.exports = function (velvet) {
 
   return {
     init: init(velvet),
-    destination: destination(velvet),
-    revisionManifest: revisionManifest,
+    destination,
+    revisionManifest,
     render: render(velvet)
   };
 };

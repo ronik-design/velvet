@@ -5,7 +5,8 @@ const File = require("vinyl");
 const vinylFile = require("vinyl-file");
 const sortKeys = require("sort-keys");
 const through = require("through2");
-const relPath = require("../utils/rel-path");
+const gutil = require("gulp-util");
+const PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = "velvet-revision-manifest";
 
@@ -33,8 +34,9 @@ const revisionManifest = function (filepath, options) {
     merge: false
   }, options, filepath);
 
-  options.base = path.resolve(options.base, ".");
-  options.path = path.resolve(options.base, options.path);
+  if (options.base) {
+    options.path = path.resolve(options.base, options.path);
+  }
 
   let manifest = {};
 
