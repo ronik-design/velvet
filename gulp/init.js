@@ -21,7 +21,7 @@ const init = function (velvet) {
         return cb(new PluginError(PLUGIN_NAME, "Streaming not supported"));
       }
 
-      const obj = site.getObject(file.path);
+      const obj = velvet.site.getObject(file.path);
 
       file.destination = obj.destination;
       file.revision = obj.revision;
