@@ -1,9 +1,9 @@
 "use strict";
 
 const hoek = require("hoek");
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
-class Page extends stencil.Document {
+class Page extends velvet.Document {
 
   constructor(options) {
 
@@ -16,7 +16,7 @@ class Page extends stencil.Document {
 
     // Data store
     Object.assign(this.data, {
-      permalink: this.data.permalink || defaults.permalink || stencil.config.permalink
+      permalink: this.data.permalink || defaults.permalink || velvet.config.permalink
     });
 
     // Apply defaults

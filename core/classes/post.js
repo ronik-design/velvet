@@ -6,11 +6,11 @@ const parse5 = require("parse5");
 const hoek = require("hoek");
 const slug = require("slug");
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
 const TOKENS = Symbol.for("tokens");
 
-class Post extends stencil.Document {
+class Post extends velvet.Document {
 
   constructor(options) {
 
@@ -41,7 +41,7 @@ class Post extends stencil.Document {
     // Data store
     Object.assign(this.data, {
       title: this.data.title || fileTitle,
-      permalink: this.data.permalink || defaults.permalink || stencil.config.permalink,
+      permalink: this.data.permalink || defaults.permalink || velvet.config.permalink,
       excerpt: null
     });
 
@@ -71,7 +71,7 @@ class Post extends stencil.Document {
   }
 
   get date() {
-    return moment.tz(this.data.date, stencil.config.timezone);
+    return moment.tz(this.data.date, velvet.config.timezone);
   }
 
   get excerpt() {

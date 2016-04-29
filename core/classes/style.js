@@ -1,10 +1,10 @@
 "use strict";
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
 const TOKENS = Symbol.for("tokens");
 
-class Style extends stencil.File {
+class Style extends velvet.File {
 
   constructor(options) {
 
@@ -20,7 +20,7 @@ class Style extends stencil.File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":urlpath": stencil.config.styles_path,
+      ":urlpath": velvet.config.styles_path,
       ":output_ext": ".css"
     });
   }
@@ -28,8 +28,8 @@ class Style extends stencil.File {
   get minify() {
 
     // Minification
-    const revisionEnvs = stencil.getConfig("styles.minify.envs") || [];
-    return revisionEnvs.indexOf(stencil.environment) >= 0;
+    const revisionEnvs = velvet.getConfig("styles.minify.envs") || [];
+    return revisionEnvs.indexOf(velvet.environment) >= 0;
   }
 }
 

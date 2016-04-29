@@ -31,7 +31,7 @@ const gulpManifest = function (filepath, options) {
   }
 
   options = Object.assign({
-    path: ".stencil-manifest",
+    path: ".velvet-manifest",
     merge: false
   }, options, filepath);
 
@@ -50,16 +50,16 @@ const gulpManifest = function (filepath, options) {
       oldUrl = file.oldUrl;
       newUrl = file.newUrl;
 
-    } else if (file.path && file.stencilObj) {
+    } else if (file.path && file.velvetObj) {
 
       const relpath = relPath(file.base, file.path);
-      const tokens = Object.assign({}, file.stencilObj[TOKENS]);
+      const tokens = Object.assign({}, file.velvetObj[TOKENS]);
       tokens[":extname"] = path.extname(relpath);
       tokens[":basename"] = path.basename(relpath, tokens[":extname"]);
       tokens[":dirname"] = path.dirname(relpath);
 
-      oldUrl = file.stencilVariant ? file.stencilVariant.url : file.stencilObj.url;
-      newUrl = file.stencilObj.getUrl(tokens);
+      oldUrl = file.velvetVariant ? file.velvetVariant.url : file.velvetObj.url;
+      newUrl = file.velvetObj.getUrl(tokens);
     }
 
     // ignore all non-mapped files

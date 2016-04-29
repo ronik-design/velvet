@@ -4,7 +4,7 @@ const through = require("through2");
 const gulpUtil = require("gulp-util");
 const PluginError = gulpUtil.PluginError;
 
-const PLUGIN_NAME = "stencil-url-map";
+const PLUGIN_NAME = "velvet-url-map";
 
 const gulpMap = function (options) {
 

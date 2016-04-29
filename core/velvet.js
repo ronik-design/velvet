@@ -4,7 +4,7 @@
 
 const hoek = require("hoek");
 
-class Stencil {
+class Velvet {
 
   init(options) {
 
@@ -38,4 +38,4 @@ class Stencil {
   }
 }
 
-module.exports = new Stencil();
+module.exports = new Velvet();

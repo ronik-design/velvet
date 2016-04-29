@@ -3,7 +3,7 @@
 const qs = require("qs");
 const getHash = require("../../utils/get-hash");
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 const File = require("./file");
 
 const TOKENS = Symbol.for("tokens");
@@ -30,7 +30,7 @@ class ImageVariant extends File {
     Object.assign(this[TOKENS], {
       ":filters": qs.stringify(this.filters),
       ":filters_hash": this.filters_hash,
-      ":urlpath": stencil.config.images_path
+      ":urlpath": velvet.config.images_path
     });
   }
 

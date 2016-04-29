@@ -5,7 +5,7 @@
 const path = require("path");
 const glob = require("glob");
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
 const REGISTRY = Symbol.for("registry");
 
@@ -25,7 +25,7 @@ class Plugins {
 
     try {
 
-      plugin = require(name)({ config: stencil.config, stencil });
+      plugin = require(name)({ config: velvet.config, velvet });
 
     } catch (e) {
 

@@ -8,7 +8,7 @@ const clone = require("hoek").clone;
 const buildPermalink = require("../../utils/build-permalink");
 const getDefaults = require("../../utils/get-defaults");
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
 const TOKENS = Symbol.for("tokens");
 const TYPE = Symbol.for("type");
@@ -45,7 +45,7 @@ class File {
       ":extname": pathParts.ext,
       ":basename": pathParts.name,
       ":dirname": pathParts.dir,
-      ":baseurl": stencil.config.baseurl
+      ":baseurl": velvet.config.baseurl
     };
   }
 
@@ -69,12 +69,12 @@ class File {
   }
 
   get defaultValues() {
-    this[DEFAULTS] = this[DEFAULTS] || getDefaults(stencil.config.defaults, this) || {};
+    this[DEFAULTS] = this[DEFAULTS] || getDefaults(velvet.config.defaults, this) || {};
     return this[DEFAULTS].values || {};
   }
 
   get defaultProcess() {
-    this[DEFAULTS] = this[DEFAULTS] || getDefaults(stencil.config.defaults, this) || {};
+    this[DEFAULTS] = this[DEFAULTS] || getDefaults(velvet.config.defaults, this) || {};
     return this[DEFAULTS].process || {};
   }
 
@@ -110,8 +110,8 @@ class File {
 
     let destination = this.url;
 
-    if (stencil.config.baseurl) {
-      destination = destination.replace(stencil.config.baseurl, "");
+    if (velvet.config.baseurl) {
+      destination = destination.replace(velvet.config.baseurl, "");
     }
 
     return destination.replace(/^\/+/, "").replace(/([?|#].+)$/, "");
@@ -163,8 +163,8 @@ class File {
   get revision() {
 
     // Revisioning
-    const revisionEnvs = stencil.getConfig(`${this[TYPE]}.revision.envs`) || [];
-    return revisionEnvs.indexOf(stencil.environment) >= 0;
+    const revisionEnvs = velvet.getConfig(`${this[TYPE]}.revision.envs`) || [];
+    return revisionEnvs.indexOf(velvet.environment) >= 0;
   }
 }
 

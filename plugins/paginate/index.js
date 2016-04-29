@@ -7,8 +7,8 @@ module.exports = function (options) {
 
   const paginator = new Paginator({
     config: options.config,
-    site: options.stencil.site,
-    Page: options.stencil.Page
+    site: options.velvet.site,
+    Page: options.velvet.Page
   });
 
   const hooks = new Hooks({ paginator });

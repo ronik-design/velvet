@@ -7,7 +7,7 @@ const buildPermalink = require("../../utils/build-permalink");
 const fileType = require("../../utils/file-type");
 const getDefaults = require("../../utils/get-defaults");
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
 const TOKENS = Symbol.for("tokens");
 const TYPE = Symbol.for("type");
@@ -38,7 +38,7 @@ class Document {
     // Permalink, has to happen after
     this.data.permalink = data.permalink ||
       this.defaultValues.permalink ||
-      stencil.config.permalink;
+      velvet.config.permalink;
 
     // Permalink tokens
     this[TOKENS] = {
@@ -46,7 +46,7 @@ class Document {
       ":output_ext": ".html",
       ":basename": pathParts.name,
       ":dirname": pathParts.dir,
-      ":baseurl": stencil.config.baseurl,
+      ":baseurl": velvet.config.baseurl,
       ":categories": this.categories ? this.categories.join("/") : null,
       ":title": this.data.slug || pathParts.name,
       ":slug": this.data.slug || slug(pathParts.name)
@@ -55,7 +55,7 @@ class Document {
 
   triggerHooks(hookType) {
     const args = [...arguments].slice(1);
-    return stencil.hooks.trigger(this[TYPE], hookType, this, ...args);
+    return velvet.hooks.trigger(this[TYPE], hookType, this, ...args);
   }
 
   getUrl(tokens, permalink) {
@@ -78,12 +78,12 @@ class Document {
   }
 
   get defaultValues() {
-    this[DEFAULTS] = this[DEFAULTS] || getDefaults(stencil.config.defaults, this) || {};
+    this[DEFAULTS] = this[DEFAULTS] || getDefaults(velvet.config.defaults, this) || {};
     return this[DEFAULTS].values || {};
   }
 
   get defaultProcess() {
-    this[DEFAULTS] = this[DEFAULTS] || getDefaults(stencil.config.defaults, this) || {};
+    this[DEFAULTS] = this[DEFAULTS] || getDefaults(velvet.config.defaults, this) || {};
     return this[DEFAULTS].process || {};
   }
 
@@ -132,8 +132,8 @@ class Document {
       destination = destination.replace(/\/$/, "/index.html");
     }
 
-    if (stencil.config.baseurl) {
-      destination = destination.replace(stencil.config.baseurl, "");
+    if (velvet.config.baseurl) {
+      destination = destination.replace(velvet.config.baseurl, "");
     }
 
     return destination.replace(/^\/+/, "").replace(/([?|#].+)$/, "");
@@ -168,7 +168,7 @@ class Document {
     let content = this.data.raw_content;
 
     if (fileType.isMarkdown(this.path)) {
-      content = stencil.converter.markdown(content);
+      content = velvet.converter.markdown(content);
     }
 
     this.data.content = content;

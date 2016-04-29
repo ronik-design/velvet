@@ -1,17 +1,17 @@
 "use strict";
 
 const getImageDimensions = require("../../utils/get-image-dimensions");
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 const ImageVariant = require("./image-variant");
 
 const TOKENS = Symbol.for("tokens");
 
-class Image extends stencil.File {
+class Image extends velvet.File {
 
   constructor(options) {
 
-    if (stencil.config.images.hasOwnProperty("copy")) {
-      options.output = stencil.config.images.copy;
+    if (velvet.config.images.hasOwnProperty("copy")) {
+      options.output = velvet.config.images.copy;
     }
 
     options.type = "images";
@@ -20,7 +20,7 @@ class Image extends stencil.File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":urlpath": stencil.config.images_path
+      ":urlpath": velvet.config.images_path
     });
 
     // Store

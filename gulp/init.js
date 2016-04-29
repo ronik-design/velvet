@@ -4,15 +4,15 @@ const through = require("through2");
 const gulpUtil = require("gulp-util");
 const PluginError = gulpUtil.PluginError;
 
-const PLUGIN_NAME = "stencil-init";
+const PLUGIN_NAME = "velvet-init";
 
-const gulpInit = function (stencil) {
+const gulpInit = function (velvet) {
 
   return function (options) {
 
     options = options || {};
 
-    const site = stencil.site;
+    const site = velvet.site;
 
     const transform = function (file, enc, cb) {
 
@@ -26,10 +26,10 @@ const gulpInit = function (stencil) {
 
       const obj = site.getObject(file.path);
 
-      file.stencilObj = obj;
+      file.velvetObj = obj;
 
       if (options.variant && obj.variants) {
-        file.stencilVariant = obj.variants[options.variant];
+        file.velvetVariant = obj.variants[options.variant];
       }
 
       cb(null, file);

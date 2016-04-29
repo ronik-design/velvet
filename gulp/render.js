@@ -9,7 +9,7 @@ const PluginError = gulpUtil.PluginError;
 const getHash = require("../utils/get-hash");
 const relPath = require("../utils/rel-path");
 
-const PLUGIN_NAME = "stencil-render";
+const PLUGIN_NAME = "velvet-render";
 const HASH_LENGTH = 12;
 
 const errorHandler = function (error, file, cb) {
@@ -98,7 +98,7 @@ const renderVariant = (file, variant, options) => {
 };
 
 
-const gulpRender = function (stencil) {
+const gulpRender = function (velvet) {
 
   return function (options) {
 
@@ -106,8 +106,8 @@ const gulpRender = function (stencil) {
 
     const env = options.env;
     const cacheEnabled = !options.noCache;
-    const site = stencil.site;
-    const templateCache = stencil.templateCache;
+    const site = velvet.site;
+    const templateCache = velvet.templateCache;
 
     const transform = function (file, enc, cb) {
 

@@ -6,10 +6,10 @@ const nunjucks = require("nunjucks");
 const prepareConfig = require("./utils/prepare-config");
 const loadCustomTags = require("./utils/load-custom-tags");
 
-const stencil = require("./core");
-const gulp = require("./gulp")(stencil);
+const velvet = require("./core");
+const gulp = require("./gulp")(velvet);
 
-module.exports.stencil = stencil;
+module.exports.velvet = velvet;
 
 module.exports.gulp = gulp;
 
@@ -24,25 +24,25 @@ module.exports.loadEnv = function (options) {
   const config = prepareConfig(options.config);
 
   // Initialize Stencil core
-  stencil.init({
+  velvet.init({
     config,
     environment: process.env.NODE_ENV || options.environment
   });
 
   // Plugin load order allows npm modules to override internal
-  stencil.plugins.requirePluginFiles(path.join(__dirname, "plugins"));
-  stencil.plugins.requirePluginModules(config.plugins);
-  stencil.plugins.requirePluginFiles(config.plugins_dir);
+  velvet.plugins.requirePluginFiles(path.join(__dirname, "plugins"));
+  velvet.plugins.requirePluginModules(config.plugins);
+  velvet.plugins.requirePluginFiles(config.plugins_dir);
 
   // Register hooks once plugins are resolved
-  stencil.hooks.registerAll(stencil.plugins.getPlugins());
+  velvet.hooks.registerAll(velvet.plugins.getPlugins());
 
   // Set up the Nunjucks env
   const loader = new nunjucks.FileSystemLoader(config.templates_dir);
   const env = new nunjucks.Environment(loader, { autoescape: options.autoescape || false });
 
-  env.addGlobal("stencil", stencil);
-  env.addGlobal("site", stencil.site);
+  env.addGlobal("velvet", velvet);
+  env.addGlobal("site", velvet.site);
 
   env.resetCache = function () {
     loader.cache = {};
@@ -52,7 +52,7 @@ module.exports.loadEnv = function (options) {
   loadCustomTags(config.templates_dir, env);
 
   // Initialize the site
-  stencil.site.init({ config });
+  velvet.site.init({ config });
 
   return env;
 };

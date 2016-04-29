@@ -13,7 +13,7 @@ const loadWithFrontMatter = require("../../utils/load-with-front-matter");
 const fileExists = require("../../utils/file-exists");
 const relPath = require("../../utils/rel-path");
 
-const stencil = require("../stencil");
+const velvet = require("../velvet");
 
 const STORE = Symbol.for("store");
 
@@ -51,7 +51,7 @@ class Site {
 
     this.config = options.config;
 
-    stencil.hooks.trigger("site", "afterInit", this);
+    velvet.hooks.trigger("site", "afterInit", this);
 
     this.reset();
   }
@@ -64,7 +64,7 @@ class Site {
       this[STORE][prop] = new DEFAULTS[prop]();
     }
 
-    stencil.hooks.trigger("site", "afterReset", this);
+    velvet.hooks.trigger("site", "afterReset", this);
 
     this.read();
   }
@@ -82,7 +82,7 @@ class Site {
     this.styles;
     this.collections;
 
-    stencil.hooks.trigger("site", "postRead", this);
+    velvet.hooks.trigger("site", "postRead", this);
   }
 
   getOrSetObject(relpath, directory, options) {
@@ -147,7 +147,7 @@ class Site {
     const directory = options.directory || this.config.source;
 
     const opts = {
-      Ctor: stencil.Page,
+      Ctor: velvet.Page,
       collection: options.label,
       load: true
     };
@@ -211,7 +211,7 @@ class Site {
       if (fileType.isData(filepath)) {
         const name = path.basename(filepath, path.extname(filepath));
         const rawData = loadYaml(filepath, this.config);
-        const data = new stencil.Data(Object.assign({ filepath }, { data: rawData }));
+        const data = new velvet.Data(Object.assign({ filepath }, { data: rawData }));
         dataObj[name] = data;
       }
     }
@@ -226,7 +226,7 @@ class Site {
     const directory = options.directory || this.config.posts_dir;
 
     const opts = {
-      Ctor: stencil.Post,
+      Ctor: velvet.Post,
       collection: options.label,
       load: true
     };
@@ -336,7 +336,7 @@ class Site {
     const directory = options.directory || this.config.images_dir;
 
     const opts = {
-      Ctor: stencil.Image
+      Ctor: velvet.Image
     };
 
     return this.getOrSetObject(relpath, directory, opts);
@@ -347,7 +347,7 @@ class Site {
     const objectsByPath = this[STORE].objectsByPath;
     const objectsByUrl = this[STORE].objectsByUrl;
 
-    const image = new stencil.Image(data);
+    const image = new velvet.Image(data);
 
     if (!objectsByPath.has(image.filepath)) {
       objectsByPath.set(image.filepath, image);
@@ -389,7 +389,7 @@ class Site {
     const directory = options.directory || this.config.source;
 
     const opts = {
-      Ctor: stencil.File,
+      Ctor: velvet.File,
       collection: options.label
     };
 
@@ -431,7 +431,7 @@ class Site {
     const directory = options.directory || this.config.scripts_dir;
 
     const opts = {
-      Ctor: stencil.Script
+      Ctor: velvet.Script
     };
 
     return this.getOrSetObject(relpath, directory, opts);
@@ -472,7 +472,7 @@ class Site {
     const directory = options.directory || this.config.styles_dir;
 
     const opts = {
-      Ctor: stencil.Style
+      Ctor: velvet.Style
     };
 
     return this.getOrSetObject(relpath, directory, opts);
@@ -513,7 +513,7 @@ class Site {
     const directory = options.directory || this.config.source;
 
     const opts = {
-      Ctor: stencil.Document,
+      Ctor: velvet.Document,
       collection: options.label,
       defaults: options.defaults,
       load: true
