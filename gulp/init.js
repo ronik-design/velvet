@@ -1,18 +1,15 @@
 "use strict";
 
 const through = require("through2");
-const gulpUtil = require("gulp-util");
-const PluginError = gulpUtil.PluginError;
+const File = require("vinyl");
+const gutil = require("gulp-util");
+const PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = "velvet-init";
 
-const gulpInit = function (velvet) {
+const init = function (velvet) {
 
-  return function (options) {
-
-    options = options || {};
-
-    const site = velvet.site;
+  return function () {
 
     const transform = function (file, enc, cb) {
 
@@ -26,10 +23,21 @@ const gulpInit = function (velvet) {
 
       const obj = site.getObject(file.path);
 
-      file.velvetObj = obj;
+      file.destination = obj.destination;
+      file.revision = obj.revision;
 
-      if (options.variant && obj.variants) {
-        file.velvetVariant = obj.variants[options.variant];
+      if (obj.variants) {
+        for (const variant in obj.variants) {
+          /* eslint-disable */
+          this.push(new File({
+            contents: file.contents,
+            path: file.path,
+            base: file.base,
+            destination: variant.destination,
+            revision: variant.revision
+          }));
+          /* eslint-enable */
+        }
       }
 
       cb(null, file);
@@ -39,4 +47,4 @@ const gulpInit = function (velvet) {
   };
 };
 
-module.exports = gulpInit;
+module.exports = init;

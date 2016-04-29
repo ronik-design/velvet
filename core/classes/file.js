@@ -49,12 +49,14 @@ class File {
     };
   }
 
-  getUrl(tokens, permalink) {
+  getUrl(tokens, options) {
+
+    options = options || {};
 
     const opts = {
-      pattern: permalink || this.data.permalink,
-      type: this[TYPE],
-      revision: this.revision
+      pattern: options.pattern || this.data.permalink,
+      revision: options.revision !== undefined ? options.revision : this.revision,
+      type: this.type
     };
 
     return buildPermalink(tokens, opts);

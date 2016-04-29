@@ -1,5 +1,3 @@
-/* eslint no-invalid-this:0 */
-
 "use strict";
 
 const path = require("path");
@@ -9,7 +7,7 @@ const sortKeys = require("sort-keys");
 const through = require("through2");
 const relPath = require("../utils/rel-path");
 
-const TOKENS = Symbol.for("tokens");
+const PLUGIN_NAME = "velvet-revision-manifest";
 
 const getManifestFile = function (options) {
 
@@ -24,7 +22,7 @@ const getManifestFile = function (options) {
   return file;
 };
 
-const gulpManifest = function (filepath, options) {
+const revisionManifest = function (filepath, options) {
 
   if (typeof filepath === "string") {
     filepath = { path: filepath };
@@ -42,33 +40,19 @@ const gulpManifest = function (filepath, options) {
 
   const transform = function (file, enc, cb) {
 
-    let oldUrl;
-    let newUrl;
-
-    if (file.oldUrl && file.newUrl) {
-
-      oldUrl = file.oldUrl;
-      newUrl = file.newUrl;
-
-    } else if (file.path && file.velvetObj) {
-
-      const relpath = relPath(file.base, file.path);
-      const tokens = Object.assign({}, file.velvetObj[TOKENS]);
-      tokens[":extname"] = path.extname(relpath);
-      tokens[":basename"] = path.basename(relpath, tokens[":extname"]);
-      tokens[":dirname"] = path.dirname(relpath);
-
-      oldUrl = file.velvetVariant ? file.velvetVariant.url : file.velvetObj.url;
-      newUrl = file.velvetObj.getUrl(tokens);
+    if (file.isNull()) {
+      return cb(null, file);
     }
 
-    // ignore all non-mapped files
-    if (!oldUrl || !newUrl || oldUrl === newUrl) {
-      cb();
-      return;
+    if (file.isStream()) {
+      return cb(new PluginError(PLUGIN_NAME, "Streaming not supported"));
     }
 
-    manifest[oldUrl] = newUrl;
+    if (!file.destination || !file.revision) {
+      return cb(null, file);
+    }
+
+    manifest[file.destination] = file.destination;
 
     cb();
   };
@@ -84,7 +68,7 @@ const gulpManifest = function (filepath, options) {
 
     if (options.merge && !manifestFile.isNull()) {
 
-      let oldManifest = {};
+      let oldManifest;
 
       try {
         oldManifest = JSON.parse(manifestFile.contents.toString());
@@ -97,7 +81,9 @@ const gulpManifest = function (filepath, options) {
 
     manifestFile.contents = new Buffer(JSON.stringify(sortKeys(manifest), null, "  "));
 
+    /* eslint-disable */
     this.push(manifestFile);
+    /* eslint-enable */
 
     cb();
   };
@@ -105,4 +91,4 @@ const gulpManifest = function (filepath, options) {
   return through.obj(transform, flush);
 };
 
-module.exports = gulpManifest;
+module.exports = revisionManifest;

@@ -1,14 +1,14 @@
-const urlManifest = require("./url-manifest");
-const urlMap = require("./url-map");
 const render = require("./render");
 const init = require("./init");
+const destination = require("./destination");
+const revisionManifest = require("./revision-manifest");
 
-module.exports = function (stencil) {
+module.exports = function (velvet) {
 
   return {
-    init: init(stencil),
-    render: render(stencil),
-    urlManifest,
-    urlMap
+    init: init(velvet),
+    destination: destination(velvet),
+    revisionManifest: revisionManifest,
+    render: render(velvet)
   };
 };

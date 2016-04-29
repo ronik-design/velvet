@@ -58,9 +58,17 @@ class Document {
     return velvet.hooks.trigger(this[TYPE], hookType, this, ...args);
   }
 
-  getUrl(tokens, permalink) {
-    permalink = permalink || this.data.permalink;
-    return buildPermalink(tokens, { pattern: permalink, type: this.type });
+  getUrl(tokens, options) {
+
+    options = options || {};
+
+    const opts = {
+      pattern: options.pattern || this.data.permalink,
+      revision: options.revision !== undefined ? options.revision : this.revision,
+      type: this.type
+    };
+
+    return buildPermalink(tokens, opts);
   }
 
   addVariant(instance) {
