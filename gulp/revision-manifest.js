@@ -1,3 +1,5 @@
+/* eslint no-invalid-this:0 */
+
 "use strict";
 
 const path = require("path");
@@ -83,9 +85,7 @@ const revisionManifest = function (filepath, options) {
 
     manifestFile.contents = new Buffer(JSON.stringify(sortKeys(manifest), null, "  "));
 
-    /* eslint-disable */
     this.push(manifestFile);
-    /* eslint-enable */
 
     cb();
   };

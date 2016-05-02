@@ -7,7 +7,9 @@ const PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = "velvet-destination";
 
-const destination = function () {
+const destination = function (opts) {
+
+  opts = opts || {};
 
   const transform = function (file, enc, cb) {
 
@@ -23,9 +25,12 @@ const destination = function () {
       return cb(null, file);
     }
 
-    file.originalPath = file.path;
-
-    file.path = path.join(file.base, file.destination);
+    if (opts.restore) {
+      file.path = file.originalPath;
+    } else {
+      file.originalPath = file.path;
+      file.path = path.join(file.base, file.destination);
+    }
 
     cb(null, file);
   };

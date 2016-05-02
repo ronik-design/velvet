@@ -1,3 +1,5 @@
+/* eslint no-invalid-this:0 */
+
 "use strict";
 
 const path = require("path");
@@ -14,10 +16,6 @@ const init = function (velvet) {
 
     const transform = function (file, enc, cb) {
 
-      if (file.isNull()) {
-        return cb(null, file);
-      }
-
       if (file.isStream()) {
         return cb(new PluginError(PLUGIN_NAME, "Streaming not supported"));
       }
@@ -28,20 +26,27 @@ const init = function (velvet) {
 
       if (obj) {
 
+        file.velvetObj = obj;
         file.destination = obj.destination;
         file.revision = obj.revision;
 
         if (obj.variants) {
-          for (const variant in obj.variants) {
-            /* eslint-disable */
-            this.push(new File({
+
+          for (const key in obj.variants) {
+
+            const variant = obj.variants[key];
+
+            const newFile = new File({
               contents: file.contents,
               path: file.path,
-              base: file.base,
-              destination: variant.destination,
-              revision: variant.revision
-            }));
-            /* eslint-enable */
+              base: file.base
+            });
+
+            newFile.velvetObj = variant;
+            newFile.destination = variant.destination;
+            newFile.revision = variant.revision;
+
+            this.push(newFile);
           }
         }
       }

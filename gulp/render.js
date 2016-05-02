@@ -1,3 +1,5 @@
+/* eslint no-invalid-this:0 */
+
 "use strict";
 
 const path = require("path");
@@ -137,9 +139,7 @@ const gulpRender = function (velvet) {
         env,
         cacheEnabled,
         templateCache,
-        /* eslint-disable */
         transform: this
-        /* eslint-enable */
       };
 
 
