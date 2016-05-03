@@ -94,8 +94,6 @@ class ScriptUrlExtension {
   }
 }
 
-module.exports = ScriptsExtension;
-
 module.exports.install = function (env) {
   env.addExtension("ScriptExtension", new ScriptExtension());
   env.addExtension("ScriptUrlExtension", new ScriptUrlExtension());

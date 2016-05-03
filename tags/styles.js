@@ -83,8 +83,6 @@ class StyleUrlExtension {
   }
 }
 
-module.exports = StylesExtension;
-
 module.exports.install = function (env) {
   env.addExtension("StyleExtension", new StyleExtension());
   env.addExtension("StyleUrlExtension", new StyleUrlExtension());

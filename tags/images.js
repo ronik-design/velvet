@@ -52,8 +52,6 @@ class ImageUrlExtension {
   }
 }
 
-module.exports = ImagesExtension;
-
 module.exports.install = function (env) {
   env.addExtension("ImageUrlExtension", new ImageUrlExtension());
   env.addFilter("image_url", getImageUrl(env.getGlobal("site")));
