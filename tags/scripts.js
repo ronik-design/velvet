@@ -1,7 +1,5 @@
 "use strict";
 
-const TAG_NAME = "scripts";
-
 const getScript = function (site) {
 
   return function (relpath, options) {
@@ -40,11 +38,11 @@ const getUrl = function (site) {
   };
 };
 
-class ScriptsExtension {
+class ScriptExtension {
 
   constructor() {
 
-    this.tags = [TAG_NAME];
+    this.tags = ["script"];
   }
 
   parse(parser, nodes) {
@@ -68,9 +66,38 @@ class ScriptsExtension {
   }
 }
 
+class ScriptUrlExtension {
+
+  constructor() {
+
+    this.tags = ["script_url"];
+  }
+
+  parse(parser, nodes) {
+
+    const tok = parser.nextToken();
+    const args = parser.parseSignature(null, true);
+
+    parser.advanceAfterBlockEnd(tok.value);
+    return new nodes.CallExtension(this, "run", args);
+  }
+
+  run(context, relpath, options) {
+
+    const script = getScript(context.env.globals.site)(relpath, options);
+
+    if (!script) {
+      return "";
+    }
+
+    return script.url;
+  }
+}
+
 module.exports = ScriptsExtension;
 
 module.exports.install = function (env) {
-  env.addExtension("ScriptsExtension", new ScriptsExtension());
-  env.addFilter(TAG_NAME, getUrl(env.getGlobal("site")));
+  env.addExtension("ScriptExtension", new ScriptExtension());
+  env.addExtension("ScriptUrlExtension", new ScriptUrlExtension());
+  env.addFilter("script_url", getUrl(env.getGlobal("site")));
 };

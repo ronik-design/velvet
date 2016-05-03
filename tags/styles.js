@@ -1,7 +1,5 @@
 "use strict";
 
-const TAG_NAME = "styles";
-
 const getStyle = function (site) {
 
   return function (relpath, options) {
@@ -29,11 +27,11 @@ const getUrl = function (site) {
   };
 };
 
-class StylesExtension {
+class StyleExtension {
 
   constructor() {
 
-    this.tags = [TAG_NAME];
+    this.tags = ["style"];
   }
 
   parse(parser, nodes) {
@@ -57,9 +55,38 @@ class StylesExtension {
   }
 }
 
+class StyleUrlExtension {
+
+  constructor() {
+
+    this.tags = ["style_url"];
+  }
+
+  parse(parser, nodes) {
+
+    const tok = parser.nextToken();
+    const args = parser.parseSignature(null, true);
+
+    parser.advanceAfterBlockEnd(tok.value);
+    return new nodes.CallExtension(this, "run", args);
+  }
+
+  run(context, relpath, options) {
+
+    const style = getStyle(context.env.globals.site)(relpath, options);
+
+    if (!style) {
+      return "";
+    }
+
+    return style.url;
+  }
+}
+
 module.exports = StylesExtension;
 
 module.exports.install = function (env) {
-  env.addExtension("StylesExtension", new StylesExtension());
-  env.addFilter(TAG_NAME, getUrl(env.getGlobal("site")));
+  env.addExtension("StyleExtension", new StyleExtension());
+  env.addExtension("StyleUrlExtension", new StyleUrlExtension());
+  env.addFilter("style_url", getUrl(env.getGlobal("site")));
 };

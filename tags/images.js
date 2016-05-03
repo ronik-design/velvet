@@ -2,8 +2,6 @@
 
 const qs = require("qs");
 
-const TAG_NAME = "images";
-
 const getImageUrl = function (site) {
 
   return function (relpath, filters) {
@@ -32,11 +30,11 @@ const getImageUrl = function (site) {
   };
 };
 
-class ImagesExtension {
+class ImageUrlExtension {
 
   constructor() {
 
-    this.tags = [TAG_NAME];
+    this.tags = ["image_url"];
   }
 
   parse(parser, nodes) {
@@ -57,6 +55,6 @@ class ImagesExtension {
 module.exports = ImagesExtension;
 
 module.exports.install = function (env) {
-  env.addExtension("ImagesExtension", new ImagesExtension());
-  env.addFilter(TAG_NAME, getImageUrl(env.getGlobal("site")));
+  env.addExtension("ImageUrlExtension", new ImageUrlExtension());
+  env.addFilter("image_url", getImageUrl(env.getGlobal("site")));
 };
