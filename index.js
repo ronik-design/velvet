@@ -1,6 +1,5 @@
 'use strict';
 
-const path = require('path');
 const assert = require('assert');
 const nunjucks = require('nunjucks');
 const prepareConfig = require('./utils/prepare-config');
@@ -41,7 +40,6 @@ module.exports.loadEnv = function (options) {
   };
 
   // Plugin load order allows npm modules to override internal
-  velvet.plugins.requirePluginFiles(path.join(__dirname, 'plugins'), env);
   velvet.plugins.requirePluginModules(config.plugins, env);
   velvet.plugins.requirePluginFiles(config.plugins_dir, env);
 
