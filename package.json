@@ -7,6 +7,9 @@
   "engines": {
     "node": ">= 5.0.0"
   },
+  "scripts": {
+    "test": "eslint **/*.js"
+  },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
     "eslint": "^2.9.0",
