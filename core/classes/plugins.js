@@ -1,34 +1,29 @@
 /* eslint global-require:0 */
 
-"use strict";
+'use strict';
 
-const path = require("path");
-const glob = require("glob");
+const path = require('path');
+const glob = require('glob');
 
-const velvet = require("../velvet");
+const velvet = require('../velvet');
 
-const REGISTRY = Symbol.for("registry");
+const REGISTRY = Symbol.for('registry');
 
 class Plugins {
 
   constructor() {
-
     this[REGISTRY] = new Map();
   }
 
   requirePlugin(name) {
-
     const registry = this[REGISTRY];
     const pluginName = path.basename(name, path.extname(name));
 
     let plugin;
 
     try {
-
-      plugin = require(name)({ config: velvet.config, velvet });
-
+      plugin = require(name)({config: velvet.config, velvet});
     } catch (e) {
-
       throw new Error(`
         There was a problem loading plugin "${name}".
         Maybe you need to install it first?
@@ -40,7 +35,6 @@ class Plugins {
   }
 
   requirePluginFiles(dirs) {
-
     let pluginDirs = [];
 
     if (Array.isArray(dirs)) {
@@ -50,8 +44,8 @@ class Plugins {
     }
 
     for (const pluginDir of pluginDirs) {
-      const globOpts = { cwd: pluginDir, ignore: "*.!(js)" };
-      const filepaths = glob.sync("*", globOpts);
+      const globOpts = {cwd: pluginDir, ignore: '*.!(js)'};
+      const filepaths = glob.sync('*', globOpts);
       for (const filepath of filepaths) {
         this.requirePlugin(path.join(pluginDir, filepath));
       }
@@ -59,14 +53,12 @@ class Plugins {
   }
 
   requirePluginModules(modules) {
-
     for (const module of modules) {
       this.requirePlugin(module);
     }
   }
 
   getPlugins() {
-
     return this[REGISTRY];
   }
 }

@@ -1,23 +1,23 @@
 /* eslint no-unused-expressions:0 */
 
-"use strict";
+'use strict';
 
-const path = require("path");
-const moment = require("moment-timezone");
-const glob = require("glob");
-const hoek = require("hoek");
+const path = require('path');
+const moment = require('moment-timezone');
+const glob = require('glob');
+const hoek = require('hoek');
 
-const fileType = require("../../utils/file-type");
-const loadYaml = require("../../utils/load-yaml");
-const loadWithFrontMatter = require("../../utils/load-with-front-matter");
-const fileExists = require("../../utils/file-exists");
-const relPath = require("../../utils/rel-path");
+const fileType = require('../../utils/file-type');
+const loadYaml = require('../../utils/load-yaml');
+const loadWithFrontMatter = require('../../utils/load-with-front-matter');
+const fileExists = require('../../utils/file-exists');
+const relPath = require('../../utils/rel-path');
 
-const velvet = require("../velvet");
+const velvet = require('../velvet');
 
-const STORE = Symbol.for("store");
+const STORE = Symbol.for('store');
 
-const PRIVATE = "**/_*/**";
+const PRIVATE = '**/_*/**';
 
 const DEFAULTS = {
   data: Object,
@@ -34,10 +34,10 @@ const DEFAULTS = {
 
 const COLLECTION_DEFAULTS = {
   docs: [],
-  label: "",
+  label: '',
   files: [],
-  relative_directory: "",
-  directory: "",
+  relative_directory: '',
+  directory: '',
   output: false
 };
 
@@ -48,29 +48,26 @@ class Site {
   }
 
   init(options) {
-
     this.config = options.config;
 
-    velvet.hooks.trigger("site", "afterInit", this);
+    velvet.hooks.trigger('site', 'afterInit', this);
 
     this.reset();
   }
 
   reset() {
-
     this[STORE].time = moment.tz(new Date(), this.config.timezone);
 
     for (const prop in DEFAULTS) {
       this[STORE][prop] = new DEFAULTS[prop]();
     }
 
-    velvet.hooks.trigger("site", "afterReset", this);
+    velvet.hooks.trigger('site', 'afterReset', this);
 
     this.read();
   }
 
   read() {
-
     this.pages;
     this.data;
     this.posts;
@@ -82,20 +79,17 @@ class Site {
     this.styles;
     this.collections;
 
-    velvet.hooks.trigger("site", "postRead", this);
+    velvet.hooks.trigger('site', 'postRead', this);
   }
 
   getOrSetObject(relpath, directory, options) {
-
     const map = this[STORE].objectsByPath;
     const filepath = path.join(directory, relpath);
 
     const Ctor = options.Ctor;
 
     if (!map.has(filepath)) {
-
       if (fileExists(filepath)) {
-
         const opts = {
           filepath,
           path: relpath,
@@ -111,11 +105,8 @@ class Site {
         const object = new Ctor(opts);
 
         map.set(filepath, object);
-
       } else {
-
         map.set(filepath, null);
-
       }
     }
 
@@ -123,7 +114,6 @@ class Site {
   }
 
   deleteObject(filepath, directory) {
-
     if (directory) {
       filepath = path.join(directory, filepath);
     }
@@ -132,7 +122,6 @@ class Site {
   }
 
   getObject(filepath, directory) {
-
     if (directory) {
       filepath = path.join(directory, filepath);
     }
@@ -141,7 +130,6 @@ class Site {
   }
 
   getPage(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.source;
@@ -156,12 +144,11 @@ class Site {
   }
 
   get pages() {
-
     const config = this.config;
 
     const defaults = hoek.applyToDefaults(COLLECTION_DEFAULTS, {
-      label: "pages",
-      relative_directory: ".",
+      label: 'pages',
+      relative_directory: '.',
       directory: config.source,
       output: true
     });
@@ -177,8 +164,8 @@ class Site {
     }
 
     const source = this.config.source;
-    const globPattern = "**/*";
-    const globOptions = { ignore: PRIVATE, cwd: source };
+    const globPattern = '**/*';
+    const globOptions = {ignore: PRIVATE, cwd: source};
     const files = glob.sync(globPattern, globOptions);
 
     for (const filepath of files) {
@@ -191,12 +178,10 @@ class Site {
   }
 
   get time() {
-
     return this[STORE].time;
   }
 
   get data() {
-
     const dataObj = this[STORE].data;
 
     if (Object.keys(dataObj).length) {
@@ -204,14 +189,14 @@ class Site {
     }
 
     const dataDir = this.config.data_dir;
-    const globPattern = "**/*";
+    const globPattern = '**/*';
     const files = glob.sync(path.join(dataDir, globPattern));
 
     for (const filepath of files) {
       if (fileType.isData(filepath)) {
         const name = path.basename(filepath, path.extname(filepath));
         const rawData = loadYaml(filepath, this.config);
-        const data = new velvet.Data(Object.assign({ filepath }, { data: rawData }));
+        const data = new velvet.Data(Object.assign({filepath}, {data: rawData}));
         dataObj[name] = data;
       }
     }
@@ -220,7 +205,6 @@ class Site {
   }
 
   getPost(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.posts_dir;
@@ -235,11 +219,10 @@ class Site {
   }
 
   get posts() {
-
     const config = this.config;
 
     const defaults = hoek.applyToDefaults(COLLECTION_DEFAULTS, {
-      label: "posts",
+      label: 'posts',
       relative_directory: relPath(config.source, config.posts_dir),
       directory: config.posts_dir,
       output: true
@@ -255,8 +238,8 @@ class Site {
       return collection.docs;
     }
 
-    const globPattern = "**/*";
-    const globOptions = { cwd: collection.directory };
+    const globPattern = '**/*';
+    const globOptions = {cwd: collection.directory};
     const files = glob.sync(globPattern, globOptions);
 
     for (const filepath of files) {
@@ -276,7 +259,6 @@ class Site {
   }
 
   get categories() {
-
     const categories = this[STORE].categories;
 
     if (Object.keys(categories).length) {
@@ -303,7 +285,6 @@ class Site {
   }
 
   get tags() {
-
     const tags = this[STORE].tags;
 
     if (Object.keys(tags).length) {
@@ -330,7 +311,6 @@ class Site {
   }
 
   getImage(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.images_dir;
@@ -343,7 +323,6 @@ class Site {
   }
 
   addImage(data) {
-
     const objectsByPath = this[STORE].objectsByPath;
     const objectsByUrl = this[STORE].objectsByUrl;
 
@@ -361,7 +340,6 @@ class Site {
   }
 
   get images() {
-
     const images = this[STORE].images;
 
     if (images.length) {
@@ -369,8 +347,8 @@ class Site {
     }
 
     const imagesDir = this.config.images_dir;
-    const globPattern = "**/*";
-    const globOptions = { cwd: imagesDir };
+    const globPattern = '**/*';
+    const globOptions = {cwd: imagesDir};
     const files = glob.sync(globPattern, globOptions);
 
     for (const filepath of files) {
@@ -383,7 +361,6 @@ class Site {
   }
 
   getFile(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.source;
@@ -397,7 +374,6 @@ class Site {
   }
 
   get files() {
-
     const filesArr = this[STORE].files;
 
     if (filesArr.length) {
@@ -406,11 +382,11 @@ class Site {
 
     const source = this.config.source;
 
-    const globPattern = "**/*";
+    const globPattern = '**/*';
     const globOptions = {
       cwd: source,
       nodir: true,
-      ignore: [ PRIVATE ]
+      ignore: [PRIVATE]
     };
 
     const files = glob.sync(globPattern, globOptions);
@@ -425,7 +401,6 @@ class Site {
   }
 
   getScript(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.scripts_dir;
@@ -438,7 +413,6 @@ class Site {
   }
 
   get scripts() {
-
     const scripts = this[STORE].scripts;
 
     if (scripts.length) {
@@ -447,7 +421,7 @@ class Site {
 
     const scriptsDir = this.config.scripts_dir;
 
-    const globPattern = "**/*";
+    const globPattern = '**/*';
     const globOptions = {
       cwd: scriptsDir,
       nodir: true,
@@ -466,7 +440,6 @@ class Site {
   }
 
   getStyle(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.styles_dir;
@@ -479,7 +452,6 @@ class Site {
   }
 
   get styles() {
-
     const styles = this[STORE].styles;
 
     if (styles.length) {
@@ -488,7 +460,7 @@ class Site {
 
     const stylesDir = this.config.styles_dir;
 
-    const globPattern = "**/*";
+    const globPattern = '**/*';
     const globOptions = {
       cwd: stylesDir,
       nodir: true,
@@ -507,7 +479,6 @@ class Site {
   }
 
   getDocument(relpath, options) {
-
     options = options || {};
 
     const directory = options.directory || this.config.source;
@@ -523,7 +494,6 @@ class Site {
   }
 
   getCollection(label, options) {
-
     options = options || {};
 
     const config = this.config;
@@ -546,7 +516,7 @@ class Site {
 
     const collection = hoek.applyToDefaults(COLLECTION_DEFAULTS, opts);
 
-    const globPattern = "**/*";
+    const globPattern = '**/*';
 
     const globOptions = {
       cwd: collection.directory,
@@ -558,13 +528,9 @@ class Site {
 
     for (const filepath of files) {
       if (fileType.isMarkdown(filepath) || fileType.isHtml(filepath)) {
-
         collection.docs.push(this.getDocument(filepath, collection));
-
       } else {
-
         collection.files.push(this.getFile(filepath, collection));
-
       }
     }
 
@@ -572,12 +538,10 @@ class Site {
   }
 
   get collections() {
-
     const config = this.config;
     const collections = {};
 
     if (config.collections) {
-
       if (Array.isArray(config.collections)) {
         for (const label of config.collections) {
           collections[label] = this.getCollection(label);

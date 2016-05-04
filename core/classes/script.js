@@ -1,15 +1,14 @@
-"use strict";
+'use strict';
 
-const velvet = require("../velvet");
+const velvet = require('../velvet');
 
-const TOKENS = Symbol.for("tokens");
+const TOKENS = Symbol.for('tokens');
 
 class Script extends velvet.File {
 
   constructor(options) {
-
     options.output = false;
-    options.type = "scripts";
+    options.type = 'scripts';
 
     super(options);
 
@@ -20,15 +19,14 @@ class Script extends velvet.File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":urlpath": velvet.config.scripts_path,
-      ":output_ext": ".js"
+      ':urlpath': velvet.config.scripts_path,
+      ':output_ext': '.js'
     });
   }
 
   get minify() {
-
     // Minification
-    const revisionEnvs = velvet.getConfig("scripts.minify.envs") || [];
+    const revisionEnvs = velvet.getConfig('scripts.minify.envs') || [];
     return revisionEnvs.indexOf(velvet.environment) >= 0;
   }
 }

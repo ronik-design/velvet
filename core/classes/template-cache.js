@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const STORE = Symbol.for("store");
+const STORE = Symbol.for('store');
 
 class TemplateCache {
 
@@ -9,7 +9,6 @@ class TemplateCache {
   }
 
   get(filepath, hash) {
-
     if (!this[STORE][filepath]) {
       return null;
     }
@@ -22,8 +21,7 @@ class TemplateCache {
   }
 
   set(filepath, tmpl, hash) {
-
-    const template = { tmpl, hash };
+    const template = {tmpl, hash};
 
     this[STORE][filepath] = template;
 

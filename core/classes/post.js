@@ -1,20 +1,19 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const moment = require("moment-timezone");
-const parse5 = require("parse5");
-const hoek = require("hoek");
-const slug = require("slug");
+const path = require('path');
+const moment = require('moment-timezone');
+const parse5 = require('parse5');
+const hoek = require('hoek');
+const slug = require('slug');
 
-const velvet = require("../velvet");
+const velvet = require('../velvet');
 
-const TOKENS = Symbol.for("tokens");
+const TOKENS = Symbol.for('tokens');
 
 class Post extends velvet.Document {
 
   constructor(options) {
-
-    options.type = "posts";
+    options.type = 'posts';
 
     super(options);
 
@@ -36,7 +35,7 @@ class Post extends velvet.Document {
     this.data.date = date;
 
     // Title
-    const fileTitle = fileDate ? pathParts.name.replace(fileDate[0], "") : pathParts.name;
+    const fileTitle = fileDate ? pathParts.name.replace(fileDate[0], '') : pathParts.name;
 
     // Data store
     Object.assign(this.data, {
@@ -53,21 +52,21 @@ class Post extends velvet.Document {
 
     // Permalink tokens
     Object.assign(this[TOKENS], {
-      ":year": this.date.format("YYYY"),
-      ":month": this.date.format("MM"),
-      ":i_month": this.date.format("M"),
-      ":day": this.date.format("DD"),
-      ":i_day": this.date.format("D"),
-      ":short_year": this.date.format("YY"),
-      ":hour": this.date.format("HH"),
-      ":minute": this.date.format("mm"),
-      ":second": this.date.format("ss"),
-      ":title": this.data.slug || fileTitle,
-      ":slug": this.data.slug || slug(fileTitle)
+      ':year': this.date.format('YYYY'),
+      ':month': this.date.format('MM'),
+      ':i_month': this.date.format('M'),
+      ':day': this.date.format('DD'),
+      ':i_day': this.date.format('D'),
+      ':short_year': this.date.format('YY'),
+      ':hour': this.date.format('HH'),
+      ':minute': this.date.format('mm'),
+      ':second': this.date.format('ss'),
+      ':title': this.data.slug || fileTitle,
+      ':slug': this.data.slug || slug(fileTitle)
     });
 
     // Trigger hook
-    this.triggerHooks("postInit");
+    this.triggerHooks('postInit');
   }
 
   get date() {
@@ -75,7 +74,6 @@ class Post extends velvet.Document {
   }
 
   get excerpt() {
-
     if (this.data.excerpt !== null) {
       return this.data.excerpt;
     }
@@ -85,13 +83,13 @@ class Post extends velvet.Document {
     const fragment = parse5.parseFragment(this.content);
 
     for (const node of fragment.childNodes) {
-      if (node.tagName === "p") {
+      if (node.tagName === 'p') {
         excerpt = node;
         break;
       }
     }
 
-    this.data.excerpt = parse5.serialize(excerpt) || "";
+    this.data.excerpt = parse5.serialize(excerpt) || '';
 
     return this.data.excerpt;
   }

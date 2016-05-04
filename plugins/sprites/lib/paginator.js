@@ -17,18 +17,20 @@ const capitalize = function (str) {
 };
 
 const intersection = function (arr1, arr2) {
-  return arr1.filter(x => arr2.indexOf(x) >= 0);
+  return arr1.filter((x) => arr2.indexOf(x) >= 0);
 };
 
 class Paginator {
 
   constructor(options) {
+
     this.config = options.config;
     this.site = options.site;
     this.Page = options.Page;
   }
 
   paginate(page) {
+
     const defaults = Object.assign({}, DEFAULTS, this.config.pagination);
 
     if (page.data.paginate instanceof Object) {
@@ -49,6 +51,7 @@ class Paginator {
   }
 
   addPages(page) {
+
     const config = page.data.paginate;
 
     let pages = Math.ceil(this.collection(page).length / config.per_page);
@@ -79,6 +82,7 @@ class Paginator {
     }
 
     for (const p of allPages.entries()) {
+
       const pageIndex = p[0];
       const pageEntry = p[1];
 
@@ -103,6 +107,7 @@ class Paginator {
   }
 
   collection(page) {
+
     let collection;
 
     if (page.data.paginate.collection === 'posts') {
@@ -113,12 +118,12 @@ class Paginator {
 
     const categories = page.data.paginate.categories;
     if (categories) {
-      collection = collection.filter(p => intersection(p.categories, categories).length);
+      collection = collection.filter((p) => intersection(p.categories, categories).length);
     }
 
     const tags = page.data.paginate.tags;
     if (tags) {
-      collection = collection.filter(p => intersection(p.tags, tags).length);
+      collection = collection.filter((p) => intersection(p.tags, tags).length);
     }
 
     return collection;
@@ -133,18 +138,19 @@ class Paginator {
   }
 
   pagePermalink(page, index) {
+
     const subdir = page.data.paginate.permalink.replace(/:num/g, index);
     const lastChar = -1;
 
     if (page.url.slice(lastChar) === '/') {
       return path.join(page.url, subdir);
+    } else {
+      const dir = path.dirname(page.url);
+      const ext = path.extname(page.url);
+      const base = path.basename(page.url, ext);
+      const suffix = subdir.replace(/\//g, '');
+      return path.join(dir, `${base}${suffix}${ext}`);
     }
-
-    const dir = path.dirname(page.url);
-    const ext = path.extname(page.url);
-    const base = path.basename(page.url, ext);
-    const suffix = subdir.replace(/\//g, '');
-    return path.join(dir, `${base}${suffix}${ext}`);
   }
 
   paginateData(page, index) {
@@ -154,6 +160,7 @@ class Paginator {
   }
 
   pageTitle(page, index) {
+
     let title;
 
     if (page.title) {
@@ -168,6 +175,7 @@ class Paginator {
   }
 
   pagePayload(context, page) {
+
     const config = page.data.paginate;
 
     const payload = {
@@ -190,6 +198,7 @@ class Paginator {
   }
 
   items(context, collection) {
+
     const config = context.page.data.paginate;
 
     const n = (config.page_num - 1) * config.per_page;

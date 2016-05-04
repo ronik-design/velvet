@@ -1,13 +1,12 @@
 /* eslint global-require:0 */
 
-"use strict";
+'use strict';
 
-const path = require("path");
-const glob = require("glob");
+const path = require('path');
+const glob = require('glob');
 
 const loadCustomTags = function (dir, env) {
-
-  const tags = glob.sync(path.join(dir, "tags", "**/*.js"));
+  const tags = glob.sync(path.join(dir, 'tags', '**/*.js'));
 
   if (tags && tags.length) {
     for (const tagPath of tags) {

@@ -1,7 +1,6 @@
-"use strict";
+'use strict';
 
 const getDefaults = function (siteDefaults, options) {
-
   siteDefaults = siteDefaults || [];
 
   const path = options.path;
@@ -9,7 +8,6 @@ const getDefaults = function (siteDefaults, options) {
   const collection = options.collection;
 
   for (const defaults of siteDefaults) {
-
     const scope = defaults.scope;
 
     if (!scope) {

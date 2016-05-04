@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 const relPath = function (base, filepath) {
-  return filepath.replace(base, "").replace(/^\//, "");
+  return filepath.replace(base, '').replace(/^\//, '');
 };
 
 module.exports = relPath;

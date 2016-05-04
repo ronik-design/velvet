@@ -1,24 +1,22 @@
-"use strict";
+'use strict';
 
-const through = require("through2");
-const path = require("path");
-const gutil = require("gulp-util");
+const through = require('through2');
+const path = require('path');
+const gutil = require('gulp-util');
 const PluginError = gutil.PluginError;
 
-const PLUGIN_NAME = "velvet-destination";
+const PLUGIN_NAME = 'velvet-destination';
 
 const destination = function (opts) {
-
   opts = opts || {};
 
   const transform = function (file, enc, cb) {
-
     if (file.isNull()) {
       return cb(null, file);
     }
 
     if (file.isStream()) {
-      return cb(new PluginError(PLUGIN_NAME, "Streaming not supported"));
+      return cb(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
     }
 
     if (!file.destination) {

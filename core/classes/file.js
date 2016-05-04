@@ -1,33 +1,32 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const fs = require("fs");
-const md5File = require("md5-file");
-const mime = require("mime");
-const clone = require("hoek").clone;
-const buildPermalink = require("../../utils/build-permalink");
-const getDefaults = require("../../utils/get-defaults");
+const path = require('path');
+const fs = require('fs');
+const md5File = require('md5-file');
+const mime = require('mime');
+const clone = require('hoek').clone;
+const buildPermalink = require('../../utils/build-permalink');
+const getDefaults = require('../../utils/get-defaults');
 
-const velvet = require("../velvet");
+const velvet = require('../velvet');
 
-const TOKENS = Symbol.for("tokens");
-const TYPE = Symbol.for("type");
-const DEFAULTS = Symbol.for("defaults");
+const TOKENS = Symbol.for('tokens');
+const TYPE = Symbol.for('type');
+const DEFAULTS = Symbol.for('defaults');
 
 class File {
 
   constructor(options) {
-
     // Type
-    this[TYPE] = options.type || "files";
+    this[TYPE] = options.type || 'files';
 
     // Data
     const data = clone(options.data || {});
 
     // Data store
     this.data = Object.assign(data, {
-      type: options.type || "files",
-      output: options.hasOwnProperty("output") ? options.output : true,
+      type: options.type || 'files',
+      output: options.hasOwnProperty('output') ? options.output : true,
       path: options.path,
       filepath: options.filepath,
       collection: options.collection,
@@ -40,22 +39,21 @@ class File {
 
     // Permalink tokens
     this[TOKENS] = {
-      ":hash": this.hash,
-      ":output_ext": pathParts.ext,
-      ":extname": pathParts.ext,
-      ":basename": pathParts.name,
-      ":dirname": pathParts.dir,
-      ":baseurl": velvet.config.baseurl
+      ':hash': this.hash,
+      ':output_ext': pathParts.ext,
+      ':extname': pathParts.ext,
+      ':basename': pathParts.name,
+      ':dirname': pathParts.dir,
+      ':baseurl': velvet.config.baseurl
     };
   }
 
   getUrl(tokens, options) {
-
     options = options || {};
 
     const opts = {
       pattern: options.pattern || this.data.permalink,
-      revision: options.revision !== undefined ? options.revision : this.revision,
+      revision: options.revision === undefined ? this.revision : options.revision,
       type: this.type
     };
 
@@ -109,14 +107,13 @@ class File {
   }
 
   get destination() {
-
     let destination = this.url;
 
     if (velvet.config.baseurl) {
-      destination = destination.replace(velvet.config.baseurl, "");
+      destination = destination.replace(velvet.config.baseurl, '');
     }
 
-    return destination.replace(/^\/+/, "").replace(/([?|#].+)$/, "");
+    return destination.replace(/^\/+/, '').replace(/([?|#].+)$/, '');
   }
 
   get mime_type() {
@@ -124,7 +121,6 @@ class File {
   }
 
   get modified_time() {
-
     if (this.data.modified_time) {
       return this.data.modified_time;
     }
@@ -138,7 +134,6 @@ class File {
   }
 
   get created_time() {
-
     if (this.data.created_time) {
       return this.data.created_time;
     }
@@ -152,7 +147,6 @@ class File {
   }
 
   get hash() {
-
     if (this.data.hash) {
       return this.data.hash;
     }
@@ -163,7 +157,6 @@ class File {
   }
 
   get revision() {
-
     // Revisioning
     const revisionEnvs = velvet.getConfig(`${this[TYPE]}.revision.envs`) || [];
     return revisionEnvs.indexOf(velvet.environment) >= 0;

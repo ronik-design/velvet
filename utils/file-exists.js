@@ -1,9 +1,8 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
+const fs = require('fs');
 
 const fileExists = function (filepath) {
-
   let exists;
 
   try {

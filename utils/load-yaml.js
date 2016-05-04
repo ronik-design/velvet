@@ -1,11 +1,10 @@
-"use strict";
+'use strict';
 
-const fs = require("fs");
-const yaml = require("js-yaml");
+const fs = require('fs');
+const yaml = require('js-yaml');
 
 const loadYaml = function (filepath, options) {
-
-  const enc = options.encoding ? options.encoding.replace("-", "") : "utf8";
+  const enc = options.encoding ? options.encoding.replace('-', '') : 'utf8';
 
   let doc;
 

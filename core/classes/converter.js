@@ -1,13 +1,10 @@
-/* eslint global-require:0 */
+'use strict';
 
-"use strict";
-
-const MARKDOWN = Symbol.for("markdown");
+const MARKDOWN = Symbol.for('markdown');
 
 const getMarkdownConverter = function (config) {
-
   if (!config.markdown) {
-    return { render: (str) => str };
+    return {render: str => str};
   }
 
   let converter;
@@ -24,7 +21,6 @@ const getMarkdownConverter = function (config) {
   const markdownOptions = config[config.markdown];
 
   if (markdownOptions instanceof Object) {
-
     converter = converter(markdownOptions.options);
 
     if (markdownOptions.plugins) {
@@ -39,9 +35,7 @@ const getMarkdownConverter = function (config) {
         }
       }
     }
-
   } else {
-
     converter = converter(markdownOptions);
   }
 

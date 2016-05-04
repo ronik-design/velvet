@@ -1,26 +1,25 @@
-"use strict";
+'use strict';
 
-const getImageDimensions = require("../../utils/get-image-dimensions");
-const velvet = require("../velvet");
-const ImageVariant = require("./image-variant");
+const getImageDimensions = require('../../utils/get-image-dimensions');
+const velvet = require('../velvet');
+const ImageVariant = require('./image-variant');
 
-const TOKENS = Symbol.for("tokens");
+const TOKENS = Symbol.for('tokens');
 
 class Image extends velvet.File {
 
   constructor(options) {
-
-    if (velvet.config.images.hasOwnProperty("copy")) {
+    if (velvet.config.images.hasOwnProperty('copy')) {
       options.output = velvet.config.images.copy;
     }
 
-    options.type = "images";
+    options.type = 'images';
 
     super(options);
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":urlpath": velvet.config.images_path
+      ':urlpath': velvet.config.images_path
     });
 
     // Store
@@ -32,8 +31,7 @@ class Image extends velvet.File {
   }
 
   get height() {
-
-    if (this.data.dimensions && this.data.dimensions.hasOwnProperty("height")) {
+    if (this.data.dimensions && this.data.dimensions.hasOwnProperty('height')) {
       return this.data.dimensions.height;
     }
 
@@ -43,8 +41,7 @@ class Image extends velvet.File {
   }
 
   get width() {
-
-    if (this.data.dimensions && this.data.dimensions.hasOwnProperty("width")) {
+    if (this.data.dimensions && this.data.dimensions.hasOwnProperty('width')) {
       return this.data.dimensions.width;
     }
 
@@ -54,12 +51,10 @@ class Image extends velvet.File {
   }
 
   get variants() {
-
     return this.data.variants;
   }
 
   addVariant(filters) {
-
     const variant = new ImageVariant({
       path: this.path,
       filepath: this.filepath,

@@ -1,20 +1,17 @@
-"use strict";
+'use strict';
 
 class Hooks {
 
   constructor(options) {
-
     this.paginator = options.paginator;
   }
 
-
   get site() {
-
     const paginator = this.paginator;
 
     return {
       postRead(site, cb) {
-        const paginatePages = site.pages.filter((p) => p.paginate);
+        const paginatePages = site.pages.filter(p => p.paginate);
         for (const page of paginatePages) {
           if (page.data.paginate) {
             paginator.paginate(page);
@@ -26,7 +23,6 @@ class Hooks {
   }
 
   get pages() {
-
     const paginator = this.paginator;
 
     return {

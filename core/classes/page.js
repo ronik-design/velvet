@@ -1,13 +1,12 @@
-"use strict";
+'use strict';
 
-const hoek = require("hoek");
-const velvet = require("../velvet");
+const hoek = require('hoek');
+const velvet = require('../velvet');
 
 class Page extends velvet.Document {
 
   constructor(options) {
-
-    options.type = "pages";
+    options.type = 'pages';
 
     super(options);
 
@@ -26,7 +25,7 @@ class Page extends velvet.Document {
     this.extend(this.data);
 
     // Trigger hook
-    this.triggerHooks("postInit");
+    this.triggerHooks('postInit');
   }
 }
 

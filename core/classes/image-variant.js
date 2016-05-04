@@ -1,20 +1,19 @@
-"use strict";
+'use strict';
 
-const qs = require("qs");
-const getHash = require("../../utils/get-hash");
+const qs = require('qs');
+const getHash = require('../../utils/get-hash');
 
-const velvet = require("../velvet");
-const File = require("./file");
+const velvet = require('../velvet');
+const File = require('./file');
 
-const TOKENS = Symbol.for("tokens");
+const TOKENS = Symbol.for('tokens');
 
 const HASH_LENGTH = 12;
 
 class ImageVariant extends File {
 
   constructor(options) {
-
-    options.type = "images";
+    options.type = 'images';
     options.output = true;
 
     super(options);
@@ -28,9 +27,9 @@ class ImageVariant extends File {
 
     // Tokens
     Object.assign(this[TOKENS], {
-      ":filters": qs.stringify(this.filters),
-      ":filters_hash": this.filters_hash,
-      ":urlpath": velvet.config.images_path
+      ':filters': qs.stringify(this.filters),
+      ':filters_hash': this.filters_hash,
+      ':urlpath': velvet.config.images_path
     });
   }
 
