@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const md5File = require('md5-file');
 const mime = require('mime');
+const minimatch = require('minimatch');
 const clone = require('hoek').clone;
 const buildPermalink = require('../../utils/build-permalink');
 const getDefaults = require('../../utils/get-defaults');
@@ -157,9 +158,25 @@ class File {
   }
 
   get revision() {
-    // Revisioning
-    const revisionEnvs = velvet.getConfig(`${this[TYPE]}.revision.envs`) || [];
-    return revisionEnvs.indexOf(velvet.environment) >= 0;
+    // Have to be in the right environment
+    const revisionEnvs = velvet.getConfig(`${this.type}.revision.envs`) || [];
+    if (!revisionEnvs.length || revisionEnvs.indexOf(velvet.environment) === -1) {
+      return false;
+    }
+
+    // If there is a path scope, a path needs to match
+    const revisionPaths = velvet.getConfig(`${this.type}.revision.paths`) || [];
+    if (revisionPaths.length) {
+      for (const revPath of revisionPaths) {
+        if (minimatch(this.path, revPath)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Had a matching environment, and no path-based scope
+    return true;
   }
 }
 
