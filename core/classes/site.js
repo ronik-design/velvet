@@ -136,8 +136,12 @@ class Site {
 
     const filedata = loadWithFrontMatter(path.join(directory, relpath), this.config);
 
+    if (!filedata.hasOwnProperty('data')) {
+      return;
+    }
+
     const opts = {
-      Ctor: filedata.data ? velvet.Page : velvet.File,
+      Ctor: velvet.Page,
       collection: options.label,
       filedata
     };
@@ -156,7 +160,6 @@ class Site {
     });
 
     const collections = this[STORE].collections;
-    const filesStore = this[STORE].files;
 
     collections.pages = collections.pages || defaults;
 
@@ -173,12 +176,8 @@ class Site {
       if (fileType.isHtml(filepath) || fileType.isMarkdown(filepath)) {
         const obj = this.getPage(filepath, collections.pages);
 
-        if (obj instanceof velvet.Page) {
+        if (obj) {
           collections.pages.docs.push(obj);
-        }
-
-        if (obj instanceof velvet.File) {
-          filesStore.push(obj);
         }
       }
     }
@@ -376,6 +375,11 @@ class Site {
 
     const directory = options.directory || this.config.source;
 
+    if (fileType.isHtml(relpath) && this.getObject(relpath, directory)) {
+      // return early if this was already read as a page
+      return;
+    }
+
     const opts = {
       Ctor: velvet.File,
       collection: options.label
@@ -403,8 +407,11 @@ class Site {
     const files = glob.sync(globPattern, globOptions);
 
     for (const filepath of files) {
-      if (!fileType.isHtml(filepath) && !fileType.isMarkdown(filepath)) {
-        filesStore.push(this.getFile(filepath));
+      if (!fileType.isMarkdown(filepath)) {
+        const file = this.getFile(filepath);
+        if (file) {
+          filesStore.push(file);
+        }
       }
     }
 

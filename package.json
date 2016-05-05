@@ -2,7 +2,7 @@
   "name": "velvet",
   "version": "0.2.0",
   "description": "",
-  "author": "Michael Shick",
+  "author": "Michael Shick <m@shick.us>",
   "license": "ISC",
   "engines": {
     "node": ">= 5.0.0"
