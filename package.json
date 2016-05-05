@@ -1,16 +1,31 @@
 {
   "name": "velvet",
   "version": "0.3.0",
-  "description": "",
-  "author": "Michael Shick <m@shick.us>",
-  "license": "ISC",
+  "description": "A very fast static-site generator that looks a bit like Jekyll",
   "engines": {
     "node": ">= 5.0.0"
   },
   "scripts": {
     "lint": "eslint **/*.js",
-    "test": "lint"
+    "test": "npm run lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ronik-design/velvet.git"
+  },
+  "keywords": [
+    "gulp",
+    "velvet",
+    "static-site",
+    "generator",
+    "ssg"
+  ],
+  "author": "Michael Shick <m@shick.us>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ronik-design/velvet/issues"
+  },
+  "homepage": "https://github.com/ronik-design/velvet#readme",
   "devDependencies": {
     "babel-eslint": "^6.0.4",
     "eslint": "^2.9.0",
@@ -32,6 +47,7 @@
     "slug": "^0.9.1",
     "sort-keys": "^1.1.1",
     "through2": "^2.0.1",
+    "velvet-gulp": "^1.1.0",
     "vinyl": "^1.1.1",
     "vinyl-file": "^2.0.0"
   },
