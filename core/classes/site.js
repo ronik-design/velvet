@@ -401,6 +401,7 @@ class Site {
     const globOptions = {
       cwd: source,
       nodir: true,
+      dot: true,
       ignore: [PRIVATE]
     };
 
