@@ -1,10 +1,13 @@
 'use strict';
 
-const getScript = function (site) {
+const url = require('url');
+
+const getScriptUrl = function (site) {
   return function (relpath, options) {
     options = options || {};
 
-    const script = site.getScript(relpath);
+    const parsed = url.parse(relpath);
+    const script = site.getScript(parsed.pathname);
 
     let bundle;
 
@@ -19,18 +22,10 @@ const getScript = function (site) {
     if (script) {
       script.output = true;
       script.bundle = bundle;
-      return script;
+      return `${script.url}${parsed.search}${parsed.hash}`;
     }
-  };
-};
 
-const getUrl = function (site) {
-  return function () {
-    const script = getScript(site)(...arguments);
-
-    if (script) {
-      return script.url;
-    }
+    return relpath;
   };
 };
 
@@ -49,13 +44,8 @@ class ScriptExtension {
   }
 
   run(context, relpath, options) {
-    const script = getScript(context.env.globals.site)(relpath, options);
-
-    if (!script) {
-      return `<!-- script ${relpath} not found -->`;
-    }
-
-    return `<script src='${script.url}' type='text/javascript'></script>`;
+    const scriptUrl = getScriptUrl(context.env.globals.site)(relpath, options);
+    return `<script src='${scriptUrl}' type='text/javascript'></script>`;
   }
 }
 
@@ -74,18 +64,12 @@ class ScriptUrlExtension {
   }
 
   run(context, relpath, options) {
-    const script = getScript(context.env.globals.site)(relpath, options);
-
-    if (!script) {
-      return '';
-    }
-
-    return script.url;
+    return getScriptUrl(context.env.globals.site)(relpath, options);
   }
 }
 
 module.exports.install = function (env) {
   env.addExtension('ScriptExtension', new ScriptExtension());
   env.addExtension('ScriptUrlExtension', new ScriptUrlExtension());
-  env.addFilter('script_url', getUrl(env.getGlobal('site')));
+  env.addFilter('script_url', getScriptUrl(env.getGlobal('site')));
 };

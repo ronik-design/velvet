@@ -1,25 +1,20 @@
 'use strict';
 
-const getStyle = function (site) {
+const url = require('url');
+
+const getStyleUrl = function (site) {
   return function (relpath, options) {
     options = options || {};
 
-    const style = site.getStyle(relpath);
+    const parsed = url.parse(relpath);
+    const style = site.getStyle(parsed.pathname);
 
     if (style) {
       style.output = true;
-      return style;
+      return `${style.url}${parsed.search}${parsed.hash}`;
     }
-  };
-};
 
-const getUrl = function (site) {
-  return function () {
-    const style = getStyle(site)(...arguments);
-
-    if (style) {
-      return style.url;
-    }
+    return relpath;
   };
 };
 
@@ -38,13 +33,8 @@ class StyleExtension {
   }
 
   run(context, relpath, options) {
-    const style = getStyle(context.env.globals.site)(relpath, options);
-
-    if (!style) {
-      return `<!-- stylesheet ${relpath} not found -->`;
-    }
-
-    return `<link rel='stylesheet' href='${style.url}' />`;
+    const styleUrl = getStyleUrl(context.env.globals.site)(relpath, options);
+    return `<link rel='stylesheet' href='${styleUrl}' />`;
   }
 }
 
@@ -63,18 +53,12 @@ class StyleUrlExtension {
   }
 
   run(context, relpath, options) {
-    const style = getStyle(context.env.globals.site)(relpath, options);
-
-    if (!style) {
-      return '';
-    }
-
-    return style.url;
+    return getStyleUrl(context.env.globals.site)(relpath, options);
   }
 }
 
 module.exports.install = function (env) {
   env.addExtension('StyleExtension', new StyleExtension());
   env.addExtension('StyleUrlExtension', new StyleUrlExtension());
-  env.addFilter('style_url', getUrl(env.getGlobal('site')));
+  env.addFilter('style_url', getStyleUrl(env.getGlobal('site')));
 };

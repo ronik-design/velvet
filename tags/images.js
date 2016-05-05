@@ -1,30 +1,32 @@
 'use strict';
 
+const url = require('url');
 const qs = require('qs');
 
 const getImageUrl = function (site) {
   return function (relpath, filters) {
+    const parsed = url.parse(relpath);
     filters = filters || {};
 
     if (typeof filters === 'string') {
       filters = qs.parse(filters);
     }
 
-    const image = site.getImage(relpath);
+    const image = site.getImage(parsed.pathname);
 
     if (!image) {
       return relpath;
     }
 
-    let url = image.url;
+    let imageUrl = image.url;
 
     if (Object.keys(filters).length > 0) {
-      url = image.addVariant(filters).url;
+      imageUrl = image.addVariant(filters).url;
     } else {
       image.output = true;
     }
 
-    return url;
+    return `${imageUrl}${parsed.search}${parsed.hash}`;
   };
 };
 
