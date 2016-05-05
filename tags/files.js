@@ -9,7 +9,7 @@ const getFileUrl = function (site) {
 
     if (file) {
       file.output = true;
-      return `${file.url}${parsed.search}${parsed.hash}`;
+      return `${file.url}${parsed.search || ''}${parsed.hash || ''}`;
     }
 
     return relpath;

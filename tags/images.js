@@ -26,7 +26,7 @@ const getImageUrl = function (site) {
       image.output = true;
     }
 
-    return `${imageUrl}${parsed.search}${parsed.hash}`;
+    return `${imageUrl}${parsed.search || ''}${parsed.hash || ''}`;
   };
 };
 

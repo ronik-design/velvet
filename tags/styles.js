@@ -11,7 +11,7 @@ const getStyleUrl = function (site) {
 
     if (style) {
       style.output = true;
-      return `${style.url}${parsed.search}${parsed.hash}`;
+      return `${style.url}${parsed.search || ''}${parsed.hash || ''}`;
     }
 
     return relpath;

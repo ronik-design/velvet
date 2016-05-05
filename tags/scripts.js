@@ -22,7 +22,7 @@ const getScriptUrl = function (site) {
     if (script) {
       script.output = true;
       script.bundle = bundle;
-      return `${script.url}${parsed.search}${parsed.hash}`;
+      return `${script.url}${parsed.search || ''}${parsed.hash || ''}`;
     }
 
     return relpath;
