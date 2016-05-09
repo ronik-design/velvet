@@ -4,9 +4,10 @@ const assert = require('assert');
 const nunjucks = require('nunjucks');
 const velvetGulp = require('velvet-gulp');
 const velvet = require('velvet-core');
-const prepareConfig = require('./utils/prepare-config');
-const loadCustomTags = require('./utils/load-custom-tags');
-const loadPluginTags = require('./utils/load-plugin-tags');
+
+const prepareConfig = require('./lib/prepare-config');
+const loadCustomTags = require('./lib/load-custom-tags');
+const loadPluginTags = require('./lib/load-plugin-tags');
 
 module.exports.velvet = velvet;
 
