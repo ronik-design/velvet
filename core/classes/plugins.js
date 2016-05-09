@@ -15,20 +15,20 @@ class Plugins {
     this[REGISTRY] = new Map();
   }
 
-  requirePlugin(name) {
+  requirePlugin(name, plugin) {
     const registry = this[REGISTRY];
     const pluginName = path.basename(name, path.extname(name));
 
-    let plugin;
-
-    try {
-      plugin = require(name)({config: velvet.config, velvet});
-    } catch (e) {
-      throw new Error(`
-        There was a problem loading plugin "${name}".
-        Maybe you need to install it first?
-        e.g. "npm install ${name}"
-      `);
+    if (!plugin) {
+      try {
+        plugin = require(name)({config: velvet.config, velvet});
+      } catch (e) {
+        throw new Error(`
+          There was a problem loading plugin "${name}".
+          Maybe you need to install it first?
+          e.g. "npm install ${name}"
+        `);
+      }
     }
 
     registry.set(pluginName, plugin);

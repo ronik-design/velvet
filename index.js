@@ -42,14 +42,14 @@ module.exports.loadEnv = function (options) {
   };
 
   // Plugin load order allows npm modules to override internal
-  velvet.plugins.requirePluginModules(config.plugins, env);
-  velvet.plugins.requirePluginFiles(config.plugins_dir, env);
+  config.plugins = config.plugins.unshift('velvet-nunjucks');
+  velvet.plugins.requirePluginModules(config.plugins);
+  velvet.plugins.requirePluginFiles(config.plugins_dir);
 
   // Register hooks once plugins are resolved
   velvet.hooks.registerAll(velvet.plugins.getPlugins());
 
   // Load template tags
-  loadCustomTags(__dirname, env);
   loadPluginTags(velvet.plugins.getPlugins(), env);
   loadCustomTags(config.templates_dir, env);
 
