@@ -42,7 +42,7 @@ module.exports.loadEnv = function (options) {
   };
 
   // Plugin load order allows npm modules to override internal
-  config.plugins = config.plugins.unshift('velvet-nunjucks');
+  config.plugins.unshift('velvet-nunjucks');
   velvet.plugins.requirePluginModules(config.plugins);
   velvet.plugins.requirePluginFiles(config.plugins_dir);
 
