@@ -1,6 +1,6 @@
 {
   "name": "velvet",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Velvet is a modular, fast, static-site generator that looks a lot like Jekyll and can be easily incorporated into Gulp-based workflows.",
   "engines": {
     "node": ">= 5.0.0"
