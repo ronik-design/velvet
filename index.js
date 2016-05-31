@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const nunjucks = require('nunjucks');
-const velvetGulp = require('velvet-gulp');
 const velvet = require('velvet-core');
 
 const prepareConfig = require('./lib/prepare-config');
@@ -10,8 +9,6 @@ const loadCustomTags = require('./lib/load-custom-tags');
 const loadPluginTags = require('./lib/load-plugin-tags');
 
 module.exports.velvet = velvet;
-
-module.exports.gulp = velvetGulp(velvet);
 
 module.exports.loadEnv = function (options) {
   assert(
@@ -53,9 +50,6 @@ module.exports.loadEnv = function (options) {
 
   // Initialize the site
   velvet.site.init({config});
-
-  // Add env to Velvet
-  velvet.env = env;
 
   return env;
 };
