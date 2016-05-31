@@ -27,11 +27,17 @@ module.exports.loadEnv = function (options) {
   const loader = new nunjucks.FileSystemLoader(config.templates_dir);
   const env = new nunjucks.Environment(loader, {autoescape: options.autoescape || false});
 
+  env.addGlobal('config', config)
+    .addGlobal('environment', environment)
+    .addGlobal('site', velvet.site);
+
+  env.resetCache = () => {
+    loader.cache = {};
+    return env;
+  };
+
   // Initialize Stencil core
-  velvet.init({
-    config,
-    environment
-  });
+  velvet.init({config, environment});
 
   // Plugin load order allows npm modules to override internal
   config.plugins.unshift('velvet-nunjucks');
@@ -47,16 +53,6 @@ module.exports.loadEnv = function (options) {
 
   // Initialize the site
   velvet.site.init({config});
-
-  env
-    .addGlobal('config', config)
-    .addGlobal('environment', environment)
-    .addGlobal('site', velvet.site);
-
-  env.resetCache = () => {
-    loader.cache = {};
-    return env;
-  };
 
   // Add env to Velvet
   velvet.env = env;
