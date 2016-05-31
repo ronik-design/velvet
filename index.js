@@ -23,6 +23,9 @@ module.exports.loadEnv = function (options) {
   const config = prepareConfig(options.config);
   const environment = process.env.NODE_ENV || options.environment;
 
+  // Initialize Stencil core
+  velvet.init({config, environment});
+
   // Set up the Nunjucks env
   const loader = new nunjucks.FileSystemLoader(config.templates_dir);
   const env = new nunjucks.Environment(loader, {autoescape: options.autoescape || false});
@@ -35,9 +38,6 @@ module.exports.loadEnv = function (options) {
     loader.cache = {};
     return env;
   };
-
-  // Initialize Stencil core
-  velvet.init({config, environment});
 
   // Plugin load order allows npm modules to override internal
   config.plugins.unshift('velvet-nunjucks');
