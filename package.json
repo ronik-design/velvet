@@ -32,12 +32,14 @@
     "eslint-config-ronik": "^1.0.3"
   },
   "dependencies": {
-    "hoek": "^3.0.4",
-    "markdown-it": "^6.0.1",
+    "hoek": "^4.0.0",
     "moment-timezone": "^0.5.1",
     "nunjucks": "^2.3.0",
     "velvet-core": "^1.0.2",
     "velvet-nunjucks": "^1.0.2"
+  },
+  "optionalDependencies": {
+    "markdown-it": "^6.0.1"
   },
   "eslintConfig": {
     "extends": "ronik",
